@@ -1,0 +1,11 @@
+(FOLDER_NAME={{ folder_name | shell_quote }}; \
+TEMPLATE_PATH={{ template_path }}; \
+OUTPUT_DIR={{ output_dir }}; \
+OUTPUT_FILE=$OUTPUT_DIR/$FOLDER_NAME.md; \
+rm -rf $OUTPUT_DIR && boilerplate \
+  --disable-dependency-prompt \
+  --non-interactive \
+  --output-folder=$OUTPUT_DIR \
+  --template-url=$TEMPLATE_PATH \
+  --var ProjectName={{ project_name }} && \
+cat $OUTPUT_FILE | tee >(pbcopy) | less)
