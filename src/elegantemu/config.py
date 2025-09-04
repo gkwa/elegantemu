@@ -143,4 +143,3 @@ def get_app_name() -> str:
         # Fallback to the package name if metadata is not available
         package_name = __package__ or __name__.split(".")[0]
         return package_name
-
