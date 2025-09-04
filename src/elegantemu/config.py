@@ -1,3 +1,4 @@
+import importlib.metadata
 import os
 import shlex
 import sys
@@ -76,10 +77,11 @@ def suggest_env_vars(missing_vars: list[str], original_args: list[str]) -> str:
 
     env_vars = " ".join(suggestions)
     command = " ".join(shlex.quote(arg) for arg in original_args)
+    app_name = get_app_name()
 
     return (
         f"Missing environment variables. Try setting them like this:\n"
-        f"{env_vars} {command}"
+        f"{env_vars} {app_name} {command}"
     )
 
 
@@ -128,3 +130,17 @@ def get_config_values(args) -> dict[str, str]:
 
     logger.debug("Final configuration: %s", config)
     return config
+
+
+def get_app_name() -> str:
+    """Get the application name from package metadata."""
+    try:
+        # Get the package name from importlib.metadata
+        return importlib.metadata.metadata(__package__ or __name__.split(".")[0])[
+            "Name"
+        ]
+    except (importlib.metadata.PackageNotFoundError, KeyError):
+        # Fallback to the package name if metadata is not available
+        package_name = __package__ or __name__.split(".")[0]
+        return package_name
+
