@@ -76,12 +76,14 @@ def suggest_env_vars(missing_vars: list[str], original_args: list[str]) -> str:
         logger.debug("Suggesting %s=%s", var, quoted_example)
 
     env_vars = " ".join(suggestions)
-    command = " ".join(shlex.quote(arg) for arg in original_args)
     app_name = get_app_name()
+    # Skip the first argument (which is the script path) and use the rest
+    user_args = " ".join(shlex.quote(arg) for arg in original_args[1:])
+    command = f"{app_name} {user_args}"
 
     return (
         f"Missing environment variables. Try setting them like this:\n"
-        f"{env_vars} {app_name} {command}"
+        f"{env_vars} {command}"
     )
 
 
